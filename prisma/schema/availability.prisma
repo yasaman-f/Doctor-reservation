@@ -1,0 +1,13 @@
+model AvailabilitySlot {
+  id                 String             @id @default(cuid())
+  doctorId           String    
+  doctor             DoctorProfile      @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  startTime          DateTime           
+  endTime            DateTime  
+  isBooked           Boolean            @default(false)
+  appointment        Appointment?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@map("availability_slots")
+}

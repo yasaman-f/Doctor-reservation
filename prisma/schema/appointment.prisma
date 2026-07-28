@@ -1,0 +1,22 @@
+enum Status{
+    PENDING
+    CONFIRMED
+    CANCELED
+    COMPLETED
+}
+
+model Appointment {
+  id                 String             @id @default(cuid())
+  time               DateTime
+  userId             String    
+  doctorId           String    
+  availabilitySlotId String             @unique
+  user               User               @relation("PatientAppointments", fields: [userId], references: [id], onDelete: Cascade)
+  doctor             DoctorProfile      @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+  availabilitySlot   AvailabilitySlot   @relation(fields: [availabilitySlotId], references: [id], onDelete: Cascade)
+  status             Status             @default(PENDING)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@map("appointments")
+}

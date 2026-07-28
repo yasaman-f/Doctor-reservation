@@ -1,0 +1,13 @@
+model DoctorProfile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty   String
+  licenseNo   String    @unique
+  bio         String?
+
+  appointments Appointment[] @relation("DoctorAppointments")
+  availabilitySlots AvailabilitySlot[]
+
+  @@map("doctor_profiles")
+}
