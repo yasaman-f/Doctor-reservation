@@ -20,11 +20,4 @@ export class AuthController {
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
-
-  @Get('doctor-only')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('DOCTOR')
-  doctorOnly(@Req() req) {
-    return { message: 'You are a doctor', user: req.user };
-  }
 }
