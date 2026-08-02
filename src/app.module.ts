@@ -8,10 +8,11 @@ import { DoctorModule } from './doctor/doctor.module';
 import { NotificationModule } from './notification/notification.module';
 import { AvailabilityModule } from './availability/availability.module';
 import { PatientController } from './patient/patient.controller';
-import { PrismaModule } from 'prisma/prisma.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
-  imports: [ PrismaModule, AuthModule, AppointmentModule, PatientModule, DoctorModule, NotificationModule, AvailabilityModule],
+  imports: [ PrismaModule, RedisModule, AuthModule, AppointmentModule, PatientModule, DoctorModule, NotificationModule, AvailabilityModule],
   controllers: [AppController],
   providers: [AppService],
 })

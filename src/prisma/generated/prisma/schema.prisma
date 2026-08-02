@@ -1,0 +1,87 @@
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELED
+  COMPLETED
+}
+
+model Appointment {
+  id                 String           @id @default(cuid())
+  time               DateTime
+  userId             String
+  doctorId           String
+  availabilitySlotId String           @unique
+  user               User             @relation("PatientAppointments", fields: [userId], references: [id], onDelete: Cascade)
+  doctor             DoctorProfile    @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+  availabilitySlot   AvailabilitySlot @relation(fields: [availabilitySlotId], references: [id], onDelete: Cascade)
+  status             Status           @default(PENDING)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@map("appointments")
+}
+
+model AvailabilitySlot {
+  id          String        @id @default(cuid())
+  doctorId    String
+  doctor      DoctorProfile @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  startTime   DateTime
+  endTime     DateTime
+  isBooked    Boolean       @default(false)
+  appointment Appointment?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("availability_slots")
+}
+
+model DoctorProfile {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty String
+  licenseNo String  @unique
+  bio       String?
+
+  appointments      Appointment[]      @relation("DoctorAppointments")
+  availabilitySlots AvailabilitySlot[]
+
+  @@map("doctor_profiles")
+}
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role
+  firstName String
+  lastName  String
+  phone     String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctorProfile DoctorProfile?
+  appointments  Appointment[]  @relation("PatientAppointments")
+
+  @@map("users")
+}
