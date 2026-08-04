@@ -4,6 +4,7 @@ import { JwtAuthGuard } from 'src/auth/Guards/jwt.auth.guard';
 import { RolesGuard } from 'src/auth/Guards/role.guard';
 import { Roles } from 'src/auth/Decorators/roles.decorator';
 import { CreateDoctorProfileDto } from './Types/DTO/createDoctorProfile.dto';
+import { UpdateDoctorProfileDto } from './Types/DTO/updateDoctorProfile.dto';
 
 
 @Controller('doctor')
@@ -27,7 +28,7 @@ export class DoctorController {
   @Patch('edit-profile')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('DOCTOR')
-  updateProfile(@Body() dto: CreateDoctorProfileDto, @Req() req) {
+  updateProfile(@Body() dto: UpdateDoctorProfileDto, @Req() req) {
     return this.doctorService.updateProfile(dto, req.user.id);
   }
 

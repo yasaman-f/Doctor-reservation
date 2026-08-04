@@ -40,20 +40,21 @@ export class DoctorService {
     }
 
     async updateProfile(userDto: UpdateDoctorProfileDto, userId: string) {
-        const profile = await this.prisma.doctorProfile.findUnique({ where: { userId } });
-        if (!profile) {
-            throw new NotFoundException('Doctor profile not found');
-        }
+    const profile = await this.prisma.doctorProfile.findUnique({ where: { userId } });
+    if (!profile) {
+        throw new NotFoundException('Doctor profile not found');
+    }
 
-        const existDoc = await this.prisma.doctorProfile.findUnique({ where: { licenseNo: userDto.licenseNo } })
-
+    if (userDto.licenseNo && userDto.licenseNo !== profile.licenseNo) {
+        const existDoc = await this.prisma.doctorProfile.findUnique({ where: { licenseNo: userDto.licenseNo } });
         if (existDoc) {
             throw new ConflictException('This license number is already registered');
         }
-
-        const updatedProfile = await this.prisma.doctorProfile.update({ where: { userId }, data: { ...userDto } });
-        return updatedProfile;
     }
+
+    const updatedProfile = await this.prisma.doctorProfile.update({ where: { userId }, data: { ...userDto } });
+    return updatedProfile;
+}
 
     async removeProfile(userId: string) {
         const profile = await this.prisma.doctorProfile.findUnique({ where: { userId } });
