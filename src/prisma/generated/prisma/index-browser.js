@@ -122,8 +122,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.AppointmentScalarFieldEnum = {
   id: 'id',
-  time: 'time',
-  userId: 'userId',
+  patientProfileId: 'patientProfileId',
   doctorId: 'doctorId',
   availabilitySlotId: 'availabilitySlotId',
   status: 'status',
@@ -147,6 +146,13 @@ exports.Prisma.DoctorProfileScalarFieldEnum = {
   specialty: 'specialty',
   licenseNo: 'licenseNo',
   bio: 'bio'
+};
+
+exports.Prisma.PatientProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  dateOfBirth: 'dateOfBirth',
+  nationalId: 'nationalId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -192,6 +198,7 @@ exports.Prisma.ModelName = {
   Appointment: 'Appointment',
   AvailabilitySlot: 'AvailabilitySlot',
   DoctorProfile: 'DoctorProfile',
+  PatientProfile: 'PatientProfile',
   User: 'User'
 };
 

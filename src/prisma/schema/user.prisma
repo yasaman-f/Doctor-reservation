@@ -16,7 +16,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   doctorProfile   DoctorProfile?
-  appointments    Appointment[]   @relation("PatientAppointments")
+  patientProfile  PatientProfile?
 
   @@map("users")
 }

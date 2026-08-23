@@ -7,11 +7,10 @@ enum Status {
 
 model Appointment {
   id                 String           @id @default(cuid())
-  time               DateTime
-  userId             String
+  patientProfileId   String
   doctorId           String
   availabilitySlotId String           @unique
-  user               User             @relation("PatientAppointments", fields: [userId], references: [id], onDelete: Cascade)
+  patientProfile     PatientProfile   @relation("PatientAppointments", fields: [patientProfileId], references: [id], onDelete: Cascade)
   doctor             DoctorProfile    @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
   availabilitySlot   AvailabilitySlot @relation(fields: [availabilitySlotId], references: [id], onDelete: Cascade)
   status             Status           @default(PENDING)
@@ -49,6 +48,18 @@ model DoctorProfile {
   @@map("doctor_profiles")
 }
 
+model PatientProfile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateOfBirth DateTime?
+  nationalId  String    @unique
+
+  appointments Appointment[] @relation("PatientAppointments")
+
+  @@map("patient_profiles")
+}
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -80,8 +91,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  doctorProfile DoctorProfile?
-  appointments  Appointment[]  @relation("PatientAppointments")
+  doctorProfile  DoctorProfile?
+  patientProfile PatientProfile?
 
   @@map("users")
 }

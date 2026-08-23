@@ -1,0 +1,11 @@
+model PatientProfile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateOfBirth DateTime?
+  nationalId  String    @unique
+
+  appointments Appointment[] @relation("PatientAppointments")
+
+  @@map("patient_profiles")
+}
