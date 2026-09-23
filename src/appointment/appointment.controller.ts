@@ -10,7 +10,7 @@ import { UpdateAppointmentStatusDto } from './Types/DTO/UpdateAppointmentStatus.
 export class AppointmentController {
     constructor(private appointmentService: AppointmentService) { }
 
-    @Post()
+    @Post('add')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('PATIENT')
     create(@Body() dto: CreateAppointmentDto, @Req() req) {
