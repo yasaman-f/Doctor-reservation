@@ -40,21 +40,21 @@ export class DoctorService {
     }
 
     async updateProfile(userDto: UpdateDoctorProfileDto, userId: string) {
-    const profile = await this.prisma.doctorProfile.findUnique({ where: { userId } });
-    if (!profile) {
-        throw new NotFoundException('Doctor profile not found');
-    }
-
-    if (userDto.licenseNo && userDto.licenseNo !== profile.licenseNo) {
-        const existDoc = await this.prisma.doctorProfile.findUnique({ where: { licenseNo: userDto.licenseNo } });
-        if (existDoc) {
-            throw new ConflictException('This license number is already registered');
+        const profile = await this.prisma.doctorProfile.findUnique({ where: { userId } });
+        if (!profile) {
+            throw new NotFoundException('Doctor profile not found');
         }
-    }
 
-    const updatedProfile = await this.prisma.doctorProfile.update({ where: { userId }, data: { ...userDto } });
-    return updatedProfile;
-}
+        if (userDto.licenseNo && userDto.licenseNo !== profile.licenseNo) {
+            const existDoc = await this.prisma.doctorProfile.findUnique({ where: { licenseNo: userDto.licenseNo } });
+            if (existDoc) {
+                throw new ConflictException('This license number is already registered');
+            }
+        }
+
+        const updatedProfile = await this.prisma.doctorProfile.update({ where: { userId }, data: { ...userDto } });
+        return updatedProfile;
+    }
 
     async removeProfile(userId: string) {
         const profile = await this.prisma.doctorProfile.findUnique({ where: { userId } });
@@ -63,6 +63,19 @@ export class DoctorService {
         }
         await this.prisma.doctorProfile.delete({ where: { userId } });
         return { message: 'Doctor profile deleted successfully' };
+    }
+
+    async findAll() {
+        return this.prisma.doctorProfile.findMany({
+            select: {
+                id: true,
+                specialty: true,
+                bio: true,
+                user: {
+                    select: { firstName: true, lastName: true },
+                },
+            },
+        });
     }
 
 }

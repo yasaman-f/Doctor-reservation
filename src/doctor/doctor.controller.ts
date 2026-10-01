@@ -23,7 +23,29 @@ import { UpdateDoctorProfileDto } from './Types/DTO/updateDoctorProfile.dto';
 @ApiTags('Doctors')
 @ApiBearerAuth('JWT-auth')
 export class DoctorController {
-  constructor(private doctorService: DoctorService) {}
+  constructor(private doctorService: DoctorService) { }
+
+  @Get()
+  @ApiOperation({
+    summary: 'List all doctors',
+    description: 'Public endpoint. No authentication required.',
+  })
+  @ApiOkResponse({
+    description: 'List of doctors returned successfully.',
+    schema: {
+      example: [
+        {
+          id: 'clxdoctorprofile1',
+          specialty: 'Cardiology',
+          bio: 'Board-certified cardiologist.',
+          user: { firstName: 'Sara', lastName: 'Ahmadi' },
+        },
+      ],
+    },
+  })
+  findAll() {
+    return this.doctorService.findAll();
+  }
 
   @Post('profile')
   @ApiOperation({
@@ -52,31 +74,31 @@ export class DoctorController {
     return this.doctorService.createProfile(dto, req.user.id);
   }
 
-    @Get('my-profile')
-    @ApiOperation({
-      summary: 'Get the authenticated doctor profile',
-      description: 'Requires a JWT for a user with the DOCTOR role.',
-    })
-    @ApiOkResponse({
-      description: 'Doctor profile returned successfully.',
-      schema: {
-        example: {
-          id: 'clxdoctorprofile1',
-          userId: 'clxuser1',
-          specialty: 'Cardiology',
-          licenseNo: 'MED-12345',
-          bio: 'Board-certified cardiologist.',
-        },
+  @Get('my-profile')
+  @ApiOperation({
+    summary: 'Get the authenticated doctor profile',
+    description: 'Requires a JWT for a user with the DOCTOR role.',
+  })
+  @ApiOkResponse({
+    description: 'Doctor profile returned successfully.',
+    schema: {
+      example: {
+        id: 'clxdoctorprofile1',
+        userId: 'clxuser1',
+        specialty: 'Cardiology',
+        licenseNo: 'MED-12345',
+        bio: 'Board-certified cardiologist.',
       },
-    })
-    @ApiUnauthorizedResponse({ description: 'A valid JWT access token is required.' })
-    @ApiForbiddenResponse({ description: 'The authenticated user does not have the DOCTOR role.' })
-    @ApiNotFoundResponse({ description: 'The authenticated user has no doctor profile.' })
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('DOCTOR')
-    getMyProfile(@Req() req) {
-      return this.doctorService.getMyProfile(req.user.id);
-    }
+    },
+  })
+  @ApiUnauthorizedResponse({ description: 'A valid JWT access token is required.' })
+  @ApiForbiddenResponse({ description: 'The authenticated user does not have the DOCTOR role.' })
+  @ApiNotFoundResponse({ description: 'The authenticated user has no doctor profile.' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('DOCTOR')
+  getMyProfile(@Req() req) {
+    return this.doctorService.getMyProfile(req.user.id);
+  }
 
   @Patch('edit-profile')
   @ApiOperation({

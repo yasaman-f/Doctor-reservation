@@ -5,7 +5,7 @@ model AvailabilitySlot {
   startTime          DateTime           
   endTime            DateTime  
   isBooked           Boolean            @default(false)
-  appointment        Appointment?
+  appointment        Appointment[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 

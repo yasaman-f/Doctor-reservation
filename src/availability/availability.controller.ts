@@ -22,7 +22,33 @@ import { Roles } from 'src/auth/Decorators/roles.decorator';
 @ApiTags('Availability')
 @ApiBearerAuth('JWT-auth')
 export class AvailabilityController {
-  constructor(private availabilityService: AvailabilityService) {}
+  constructor(private availabilityService: AvailabilityService) { }
+
+  @Get('doctor/:doctorId')
+  @ApiOperation({
+    summary: 'List a doctor’s open availability slots',
+    description: 'Public endpoint. Returns only unbooked slots for the given doctor.',
+  })
+  @ApiParam({ name: 'doctorId', description: 'Doctor profile ID.', example: 'clxdoctorprofile1' })
+  @ApiOkResponse({
+    description: 'Open availability slots returned successfully.',
+    schema: {
+      example: [
+        {
+          id: 'clxavailability1',
+          doctorId: 'clxdoctorprofile1',
+          startTime: '2026-10-01T09:00:00.000Z',
+          endTime: '2026-10-01T09:30:00.000Z',
+          isBooked: false,
+          createdAt: '2026-09-23T00:00:00.000Z',
+          updatedAt: '2026-09-23T00:00:00.000Z',
+        },
+      ],
+    },
+  })
+  findByDoctorId(@Param('doctorId') doctorId: string) {
+    return this.availabilityService.findByDoctorId(doctorId);
+  }
 
   @Post('add')
   @ApiOperation({

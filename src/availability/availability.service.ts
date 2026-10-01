@@ -11,6 +11,12 @@ export class AvailabilityService {
         private prisma: PrismaService,
     ) { }
 
+    async findByDoctorId(doctorId: string) {
+        return this.prisma.availabilitySlot.findMany({
+            where: { doctorId, isBooked: false },
+        });
+    }
+
     async createAvailability(userDto: CreateAvailabilityDto, doctorId: string) {
 
         const doctorProfile = await this.prisma.doctorProfile.findUnique({ where: { userId: doctorId } });

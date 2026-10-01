@@ -10,7 +10,7 @@ model Appointment {
   id                  String           @id @default(cuid())
   patientProfileId    String
   doctorId            String
-  availabilitySlotId  String           @unique
+  availabilitySlotId  String           
   patientProfile      PatientProfile   @relation("PatientAppointments", fields: [patientProfileId], references: [id], onDelete: Cascade)
   doctor              DoctorProfile    @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
   availabilitySlot    AvailabilitySlot @relation(fields: [availabilitySlotId], references: [id], onDelete: Cascade)
