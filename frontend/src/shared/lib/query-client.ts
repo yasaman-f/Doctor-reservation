@@ -6,6 +6,9 @@ export const queryKeys = {
   doctorProfile: ['doctor', 'profile'] as const,
   doctorAvailability: ['doctor', 'availability'] as const,
   myAppointments: ['appointments', 'mine'] as const,
+  doctors: ['patients', 'booking', 'doctors'] as const,
+  doctorAvailableSlots: (doctorId: string) =>
+    ['patients', 'booking', 'doctors', doctorId, 'slots'] as const,
 };
 
 export function createQueryClient(): QueryClient {

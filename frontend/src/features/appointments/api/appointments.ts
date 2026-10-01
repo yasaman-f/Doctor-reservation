@@ -1,9 +1,27 @@
 import type {
   Appointment,
+  AvailableSlot,
   CreateAppointmentPayload,
+  Doctor,
   UpdateAppointmentStatusPayload,
 } from '@/features/appointments/types';
 import { apiClient } from '@/shared/lib/axios';
+
+/** GET /doctor — public; lists doctor profiles. */
+export async function getDoctors(): Promise<Doctor[]> {
+  const { data } = await apiClient.get<Doctor[]>('/doctor');
+  return data;
+}
+
+/** GET /availability/doctor/:doctorId — public; returns only unbooked slots. */
+export async function getAvailableSlots(
+  doctorId: string,
+): Promise<AvailableSlot[]> {
+  const { data } = await apiClient.get<AvailableSlot[]>(
+    `/availability/doctor/${doctorId}`,
+  );
+  return data;
+}
 
 /** POST /appointment/add */
 export async function createAppointment(

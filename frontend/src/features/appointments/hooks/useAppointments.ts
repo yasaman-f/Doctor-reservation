@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createAppointment,
+  getAvailableSlots,
+  getDoctors,
   getMyAppointments,
   updateAppointmentStatus,
 } from '@/features/appointments/api/appointments';
@@ -15,6 +17,22 @@ export function useMyAppointmentsQuery(enabled = true) {
     queryKey: queryKeys.myAppointments,
     queryFn: getMyAppointments,
     enabled,
+  });
+}
+
+export function useDoctorsQuery(enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.doctors,
+    queryFn: getDoctors,
+    enabled,
+  });
+}
+
+export function useAvailableSlotsQuery(doctorId: string | null) {
+  return useQuery({
+    queryKey: queryKeys.doctorAvailableSlots(doctorId ?? ''),
+    queryFn: () => getAvailableSlots(doctorId ?? ''),
+    enabled: Boolean(doctorId),
   });
 }
 
